@@ -1,0 +1,572 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Metodologías activas y entorno universitario</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una sola columna de lectura (760px), cabecera con mapa de salas y llaves, una escena a la vez. Fondo blanco, azul y verde institucionales. */
+:root {
+  --bg: #ffffff;
+  --ink: #14243a;
+  --muted: #4a5b70;
+  --line: #d3dce8;
+  --blue: #0a4c8c;
+  --blue-tint: #e8f0f9;
+  --green: #2a7a3b;
+  --green-tint: #e8f4ea;
+  --err: #a4261f;
+  --err-tint: #fbeceb;
+  --font: Aptos, "Segoe UI", Inter, system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 760px; margin: 0 auto; }
+header.top { border-bottom: 3px solid var(--blue); padding-block: 18px 14px; display: grid; gap: 12px; }
+.brand { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.brand strong { font-size: 15px; color: var(--blue); letter-spacing: .02em; }
+.brand span { font-size: 14px; color: var(--muted); }
+.keys { display: flex; gap: 8px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.keys li { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 4px 10px 4px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+.keys li.got { border-color: var(--green); background: var(--green-tint); color: var(--green); font-weight: 600; }
+.keys svg { width: 18px; height: 18px; }
+nav.map ol { display: flex; gap: 6px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+nav.map li { font-size: 13px; padding: 3px 10px; border-radius: 4px; background: #f1f5f9; color: var(--muted); }
+nav.map li.done { background: var(--green-tint); color: var(--green); }
+nav.map li.current { background: var(--blue); color: #fff; font-weight: 600; }
+main { padding-block: 28px 0; }
+.eyebrow { margin: 0 0 6px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
+h1, h2 { line-height: 1.2; margin: 0 0 14px; text-wrap: balance; color: var(--blue); }
+h1 { font-size: 34px; }
+h2 { font-size: 26px; }
+h2:focus, #fb:focus { outline: none; }
+p { margin: 0 0 14px; max-width: 68ch; }
+.scene { display: grid; gap: 6px; }
+.story { background: var(--blue-tint); border-radius: 8px; padding: 16px 18px; margin-bottom: 18px; }
+.story p:last-child { margin-bottom: 0; }
+.story .tag { display: inline-block; font-size: 13px; font-weight: 600; background: #fff; color: var(--blue); border-radius: 4px; padding: 1px 8px; margin-bottom: 8px; }
+.instr { border-left: 4px solid var(--green); padding: 2px 0 2px 14px; margin: 0 0 16px; }
+.note { font-size: 15px; color: var(--muted); }
+fieldset { border: 0; padding: 0; margin: 0 0 14px; min-width: 0; }
+legend { font-weight: 700; font-size: 18px; padding: 0; margin-bottom: 10px; }
+.opts { display: grid; gap: 10px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; border: 2px solid var(--line); border-radius: 8px; padding: 12px 14px; cursor: pointer; background: #fff; }
+.opt:hover { border-color: var(--blue); }
+.opt:has(input:checked) { border-color: var(--blue); background: var(--blue-tint); }
+.opt:has(input:focus-visible) { outline: 3px solid var(--blue); outline-offset: 2px; }
+.opt input { margin-top: 5px; width: 18px; height: 18px; accent-color: var(--blue); flex: none; }
+.opt .body { display: grid; gap: 2px; min-width: 0; }
+.opt .body span { color: var(--muted); font-size: 15px; }
+.opt.tried { background: var(--err-tint); border-color: var(--err); cursor: default; }
+.opt.won { background: var(--green-tint); border-color: var(--green); cursor: default; }
+.opt .state { font-size: 13px; font-weight: 700; }
+.opt.tried .state { color: var(--err); }
+.opt.won .state { color: var(--green); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+button { font: inherit; font-weight: 600; border-radius: 8px; padding: 10px 18px; cursor: pointer; border: 2px solid var(--blue); background: var(--blue); color: #fff; }
+button:hover:not(:disabled) { background: #083d72; }
+button.ghost { background: #fff; color: var(--blue); }
+button.ghost:hover:not(:disabled) { background: var(--blue-tint); }
+button.go { background: var(--green); border-color: var(--green); }
+button.go:hover:not(:disabled) { background: #20602e; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, summary:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+#fb { margin-top: 18px; display: grid; gap: 12px; }
+.card { border-radius: 8px; padding: 14px 16px; border: 1px solid var(--line); }
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p:last-child { margin-bottom: 0; }
+.card.bad { background: var(--err-tint); border-color: var(--err); }
+.card.bad h3 { color: var(--err); }
+.card.ok { background: var(--green-tint); border-color: var(--green); }
+.card.ok h3 { color: var(--green); }
+.card.hint { background: #fff; border: 2px dashed var(--blue); }
+.card.hint h3 { color: var(--blue); }
+.ind { display: grid; gap: 4px; font-size: 14px; margin-top: 8px; }
+.bar { height: 8px; border-radius: 4px; background: #e4eaf2; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--blue); }
+.card.bad .bar i { background: var(--err); }
+.card.ok .bar i { background: var(--green); }
+.tool { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+.tool legend { font-size: 17px; float: left; width: 100%; margin-bottom: 4px; }
+.tool legend + * { clear: both; }
+.tool .desc { margin: 0 0 8px; font-size: 15px; color: var(--muted); }
+.cats { display: flex; gap: 8px; flex-wrap: wrap; }
+.cat { display: flex; gap: 8px; align-items: center; font-size: 15px; border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+.cat:has(input:checked) { border-color: var(--blue); background: var(--blue-tint); }
+.cat:has(input:focus-visible) { outline: 3px solid var(--blue); outline-offset: 2px; }
+.cat input { accent-color: var(--blue); }
+.tool .res { margin: 10px 0 0; font-size: 15px; padding: 8px 12px; border-radius: 6px; }
+.tool .res.ok { background: var(--green-tint); color: #1c5a2a; }
+.tool .res.bad { background: var(--err-tint); color: #7d1b16; }
+details.arch { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 18px; }
+details.arch summary { cursor: pointer; font-weight: 600; color: var(--blue); }
+.met { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.met strong { color: var(--blue); }
+.met p { margin: 2px 0; font-size: 15px; }
+.badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; padding: 0; list-style: none; }
+.badges li { background: var(--green-tint); color: var(--green); font-weight: 600; border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+.tbl { overflow-x: auto; margin-bottom: 18px; }
+table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 15px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+label.f { display: block; font-weight: 600; margin: 12px 0 6px; }
+select, textarea { font: inherit; width: 100%; max-width: 100%; border: 2px solid var(--line); border-radius: 8px; padding: 10px 12px; background: #fff; color: var(--ink); }
+textarea { min-height: 110px; resize: vertical; }
+footer { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 16px; font-size: 14px; color: var(--muted); }
+footer p { max-width: none; margin-bottom: 6px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 520px) { h1 { font-size: 28px; } h2 { font-size: 23px; } body { font-size: 16px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11.5 12H21M18 12v4M21 12v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><strong>Diplomado en IA y Tecnologías Digitales · Módulo 3</strong><span>Capacitación docente · Escape room</span></div>
+    <ul class="keys" id="keys" aria-label="Llaves obtenidas"></ul>
+    <nav class="map" aria-label="Mapa de salas"><ol id="map"></ol></nav>
+  </header>
+  <main id="app"></main>
+  <footer>
+    <p><strong>Declaración de uso de IA.</strong> Los casos, textos e imágenes de este recurso se elaboraron con apoyo de inteligencia artificial generativa y fueron revisados por la autora. Los contenidos de las fichas se contrastan con apuntes propios y la bibliografía del curso. No se usan datos reales de estudiantes.</p>
+    <p>Autoría: Kissy González · Licencia Creative Commons CC BY 4.0. Las imágenes institucionales de CANVAS-UTEM se citan con su fuente.</p>
+  </footer>
+</div>
+
+<script>
+/* ---------- Contenido ---------- */
+const ROOMS = [
+  { n: 'Recepción' }, { n: 'Laboratorio de datos' }, { n: 'Territorio' }, { n: 'Aula en crisis' }, { n: 'Taller de proyectos' }, { n: 'Red internacional' }, { n: 'Salida' }
+];
+
+const MET = [
+  { id: 'abp', name: 'ABP (Aprendizaje Basado en Problemas/Proyectos)',
+    def: 'Los estudiantes aprenden resolviendo un problema o desarrollando un proyecto complejo y auténtico, en equipo y con el docente como guía.',
+    car: 'Problema o producto central · Trabajo en equipos · Docente facilitador · Cierre con una solución o producto' },
+  { id: 'inv', name: 'Aprendizaje por Investigación',
+    def: 'Los estudiantes formulan preguntas, revisan literatura, recogen y analizan datos y comunican hallazgos, como en una investigación real.',
+    car: 'Pregunta de investigación · Revisión de literatura · Análisis de evidencia empírica · Revisión crítica entre pares' },
+  { id: 'as', name: 'Aprendizaje más Servicio (A+S)',
+    def: 'Combina objetivos del curso con un servicio a una necesidad real de la comunidad, seguido de reflexión sobre la experiencia.',
+    car: 'Socio comunitario · Servicio con objetivos curriculares · Reflexión sistemática · Beneficio mutuo' },
+  { id: 'coil', name: 'COIL',
+    def: 'Collaborative Online International Learning: cursos de universidades de distintos países trabajan juntos en línea en tareas compartidas.',
+    car: 'Dos o más instituciones · Trabajo colaborativo en línea · Comunicación intercultural · Tareas conjuntas' },
+  { id: 'ai', name: 'Aula Invertida (Flipped Classroom)',
+    def: 'La teoría se estudia antes, de forma asincrónica, y la clase presencial se usa para aplicar, discutir y resolver casos.',
+    car: 'Material previo (videos, lecturas) · Clase activa · Trabajo colaborativo · Retroalimentación inmediata' }
+];
+
+const CATS = [
+  { id: 'pares', name: 'Interacción entre pares' },
+  { id: 'eval', name: 'Evaluación y comprobación' },
+  { id: 'reg', name: 'Registro de proceso y evidencias' }
+];
+
+const TOOLS = [
+  { id: 'foro', name: 'Foro de discusión', desc: 'Espacio abierto donde cualquiera publica y responde.', cat: 'pares',
+    ok: 'Correcto. El foro mueve la conversación entre estudiantes.',
+    bad: 'Si lo usas como evaluación, recibirás comentarios de cortesía y ninguna medición fiable. Pista: su fuerza es el intercambio, no la nota ni el archivo.' },
+  { id: 'taller', name: 'Taller de revisión entre pares', desc: 'Asigna a cada estudiante los trabajos de otros, con opción de anonimato.', cat: 'pares',
+    ok: 'Correcto. Distribuye revisiones entre estudiantes, incluso en modo ciego.',
+    bad: 'Si lo tratas como un simple archivo, pierdes la coevaluación y nadie contrasta ideas. Pista: lo que lo define es que unos estudiantes revisan el trabajo de otros.' },
+  { id: 'tarea', name: 'Tarea con buzón único', desc: 'Recibe una entrega individual que califica el docente.', cat: 'eval',
+    ok: 'Correcto. Recoge una entrega que evalúa el docente.',
+    bad: 'Si esperas conversación de esta herramienta, el trabajo llega solo a ti y nadie más lo ve. Pista: piensa en quién lee y califica lo que se sube.' },
+  { id: 'quiz', name: 'Quiz en línea', desc: 'Preguntas con corrección automática.', cat: 'eval',
+    ok: 'Correcto. Comprueba conocimientos de forma rápida y automática.',
+    bad: 'Si lo usas para guardar procesos, solo sabrás qué recuerdan, no cómo trabajaron. Pista: ¿mide lo que recuerdan o conserva lo que hicieron?' },
+  { id: 'porta', name: 'e-Portafolio o bitácora', desc: 'Cada estudiante va anotando avances y reflexiones a lo largo del tiempo.', cat: 'reg',
+    ok: 'Correcto. Guarda el proceso y muestra su evolución.',
+    bad: 'Si lo usas como entrega final única, el proceso se pierde. Pista: su valor está en la evolución, no en una nota puntual.' },
+  { id: 'repo', name: 'Repositorio de informes', desc: 'Lugar donde se depositan informes y evidencias para consultarlos después.', cat: 'reg',
+    ok: 'Correcto. Concentra y conserva las evidencias.',
+    bad: 'Si lo usas para evaluar con puntaje, no obtienes retroalimentación; solo guardas archivos. Pista: ¿sirve para calificar o para conservar y consultar?' }
+];
+
+const STEPS = [
+  { type: 'intro' },
+  { type: 'classify', id: 's0', room: 0, label: 'Sala 0 · Clasificar herramientas', award: { key: 0 } },
+
+  { type: 'choice', id: 'c1m', room: 1, label: 'Caso 1 · Elegir metodología', nivel: 'Nivel 1 · Configuración inicial',
+    title: 'Revisión de literatura y datos empíricos',
+    situation: 'Dictas el curso de Metodología de la Investigación. Necesitas que tus estudiantes redacten la revisión de literatura, analicen datos empíricos y coevalúen de manera ciega y rigurosa los avances de sus compañeros.',
+    question: '¿Qué metodología activa se ajusta mejor a este curso?',
+    okMsg: 'El curso pide indagar: revisar literatura, analizar datos y someter el trabajo a la crítica de pares. Eso describe el Aprendizaje por Investigación.',
+    options: [
+      { id: 'abp', label: MET[0].name, desc: MET[0].def, consequence: 'Planteas un problema con producto final. El equipo se concentra en entregar el producto, y la revisión de literatura y el análisis de datos quedan en segundo plano.' },
+      { id: 'coil', label: MET[3].name, desc: MET[3].def, consequence: 'Organizas un trabajo con una universidad extranjera. La coordinación de horarios e idioma consume el semestre y la pregunta de investigación se diluye.' },
+      { id: 'inv', ok: true, label: MET[1].name, desc: MET[1].def },
+      { id: 'as', label: MET[2].name, desc: MET[2].def, consequence: 'Buscas un socio comunitario, pero la situación no pide un servicio al territorio. El tiempo se va en coordinación y el análisis de datos no avanza.' },
+      { id: 'ai', label: MET[4].name, desc: MET[4].def, consequence: 'Trasladas la teoría a videoclases. Ayuda con los contenidos, pero no organiza cómo se redacta, se analiza ni se coevalúa el trabajo de investigación.' }
+    ],
+    hint: 'Relee lo que deben hacer los estudiantes: revisar literatura, analizar datos empíricos y evaluarse entre pares con rigor. ¿Qué metodología pone la indagación científica en el centro?' },
+
+  { type: 'choice', id: 'c1c', room: 1, label: 'Caso 1 · Configurar CANVAS', nivel: 'Nivel 1 · Configuración inicial', use: 'inv',
+    title: 'Configura la entrega de avances',
+    situation: 'Aplicarás Aprendizaje por Investigación. Los estudiantes deben subir avances, recibir críticas rigurosas de sus compañeros y mantener un registro de su trabajo.',
+    question: '¿Cómo configuras la actividad en CANVAS?',
+    options: [
+      { id: 'A', label: 'Foro abierto', desc: 'Configuras un foro de discusión abierto para que suban sus avances de investigación.',
+        consequence: 'Pasan dos semanas y el foro colapsa. Los estudiantes comentan «Buen trabajo» solo por cumplir, no hay anonimato para la crítica científica y recibes 25 correos que se quejan de la falta de retroalimentación objetiva.',
+        adjust: 'Debes pausar la actividad y reestructurar la entrega.', ind: { name: 'Retroalimentación objetiva', text: 'muy baja', level: 10 },
+        hint: 'Fíjate en quién ve cada trabajo y si la crítica puede ser anónima. ¿Qué herramienta asigna revisores automáticamente?' },
+      { id: 'C', ok: true, label: 'e-Portafolio + Taller de revisión entre pares', desc: 'Configuras un e-Portafolio para la bitácora y un Taller de revisión entre pares en CANVAS con evaluación ciega.',
+        consequence: 'El sistema asigna automáticamente 2 revisiones anónimas por estudiante. Se genera un debate crítico sobre los datos empíricos y la autonomía del grupo sube un 80%.',
+        ind: { name: 'Autonomía del grupo', text: '+80%', level: 80 } },
+      { id: 'B', label: 'Tarea con buzón único', desc: 'Creas una tarea individual con buzón único y una rúbrica sumativa al final.',
+        consequence: 'Los estudiantes entregan el informe, pero no hay aprendizaje colaborativo ni contraste de hipótesis entre pares. La revisión recae al 100% sobre ti al final del semestre y tu carga de evaluación se dispara.',
+        adjust: 'Tendrás que habilitar instancias intermedias para el próximo hito.', ind: { name: 'Interacción entre pares', text: 'nula', level: 0 },
+        hint: 'Si toda la revisión llega al final y solo a ti, no hay contraste durante el proceso. Busca una combinación que registre el avance y reparta la revisión entre los estudiantes.' }
+    ],
+    win: 'Conviertes la actividad en un proceso fluido y autónomo.', award: { key: 1, badge: 'Investigador Tecnopedagógico' } },
+
+  { type: 'choice', id: 'c2m', room: 2, label: 'Caso 2 · Elegir metodología', nivel: 'Nivel 2 · Secuencia didáctica',
+    title: 'Diagnóstico con la junta vecinal',
+    situation: 'En la asignatura de Desarrollo Comunitario, los estudiantes deben realizar un diagnóstico participativo con vecinos de una junta vecinal local y levantar un informe de gestión con impacto socio-territorial real.',
+    question: '¿Qué metodología activa se ajusta mejor a esta asignatura?',
+    okMsg: 'Un diagnóstico con una junta vecinal y un informe con impacto real unen los objetivos del curso con un servicio a la comunidad, más reflexión. Eso es Aprendizaje más Servicio.',
+    options: [
+      { id: 'ai', label: MET[4].name, desc: MET[4].def, consequence: 'Reorganizas las clases con videos y casos. Es útil, pero el diagnóstico con vecinos sigue sin un espacio real en el territorio.' },
+      { id: 'as', ok: true, label: MET[2].name, desc: MET[2].def },
+      { id: 'coil', label: MET[3].name, desc: MET[3].def, consequence: 'Pones a los estudiantes a trabajar con otra universidad. La junta vecinal queda fuera de la actividad.' },
+      { id: 'inv', label: MET[1].name, desc: MET[1].def, consequence: 'Los estudiantes se concentran en recoger datos y escribir. Los vecinos pasan a ser una fuente de información y no socios; el informe nunca vuelve a la comunidad.' },
+      { id: 'abp', label: MET[0].name, desc: MET[0].def, consequence: 'Defines un proyecto con producto final, pero sin un vínculo sostenido con la junta vecinal. El informe cumple en el papel, sin impacto real en el territorio.' }
+    ],
+    hint: 'Mira quiénes participan y qué se espera del informe. ¿Qué metodología exige trabajar con una comunidad real y reflexionar sobre la responsabilidad social?' },
+
+  { type: 'choice', id: 'c2c', room: 2, label: 'Caso 2 · Configurar CANVAS', nivel: 'Nivel 2 · Secuencia didáctica', use: 'as',
+    title: 'Configura la secuencia de terreno',
+    situation: 'Aplicarás Aprendizaje más Servicio. Los estudiantes tienen que ir al territorio, registrar lo que viven, reflexionar éticamente y entregar un informe de gestión comunitaria.',
+    question: '¿Qué herramientas habilitas en CANVAS?',
+    options: [
+      { id: 'B', ok: true, label: 'Diagnóstico participativo + Diarios de campo + Repositorio', desc: 'Habilitas espacios de diagnóstico participativo, diarios de campo virtuales periódicos y un repositorio para el informe de gestión comunitaria.',
+        consequence: 'Los estudiantes registran cada semana sus bitácoras de trabajo en terreno, suben evidencias del diagnóstico y tú retroalimentas las reflexiones éticas en los foros.',
+        ind: { name: 'Impacto en el entorno', text: 'alto', level: 85 } },
+      { id: 'C', label: 'Quiz de opción múltiple', desc: 'Creas un quiz de opción múltiple en CANVAS sobre normativas de responsabilidad social.',
+        consequence: 'El alumnado memoriza conceptos para el test, pero no desarrolla competencias socioemocionales ni resuelve problemas en escenarios de incertidumbre real.',
+        adjust: 'Evaluaste memorización, no aprendizaje situado. Reintenta la estructura.', ind: { name: 'Aprendizaje situado', text: 'bajo', level: 20 },
+        hint: 'Un quiz mide recuerdo. Busca herramientas que recojan evidencia de lo vivido en terreno y den espacio a la reflexión ética.' },
+      { id: 'A', label: 'PDFs teóricos + presentación', desc: 'Publicas módulos teóricos sobre responsabilidad social y pides una presentación en diapositivas sobre la comunidad, sin salir del aula.',
+        consequence: 'Los líderes comunitarios reportan que los estudiantes nunca se presentaron al territorio. La actividad pierde su dimensión de responsabilidad social.',
+        adjust: 'Se rompe el vínculo con la junta vecinal y se pierde la alianza.', ind: { name: 'Impacto en el entorno', text: 'cero', level: 0 },
+        hint: 'El informe debe tener impacto real. ¿Qué configuración obliga a registrar lo que ocurre en el territorio y no solo a hablar de él?' }
+    ],
+    win: 'Tu secuencia conecta el aula con el territorio.' },
+
+  { type: 'choice', id: 'c2x', room: 2, label: 'Caso 2 · Contingencia', nivel: 'Nivel 2 · Contingencia comunitaria', use: 'as',
+    title: 'Los vecinos no pueden asistir',
+    situation: 'Llega un aviso de la junta vecinal: esta semana los vecinos no pueden asistir a la reunión presencial del diagnóstico.',
+    question: '¿Cómo adaptas la actividad para mantener la participación?',
+    options: [
+      { id: 'a', label: 'Suspender', desc: 'Suspendes el diagnóstico hasta que todos puedan asistir presencialmente.',
+        consequence: 'La junta interpreta la pausa como falta de compromiso y el cronograma se corre un mes. Los estudiantes pierden el ritmo de sus diarios de campo.',
+        hint: 'La participación no tiene que detenerse. Cambia el canal, no el objetivo.' },
+      { id: 'c', ok: true, label: 'Pasar a modo asincrónico', desc: 'Mantienes los diarios de campo y abres un espacio asincrónico en CANVAS donde los estudiantes suben los aportes que los vecinos entregan por audio, formulario o visitas breves, y tú los retroalimentas en el foro.',
+        consequence: 'La participación continúa de forma asincrónica, el diagnóstico recoge más voces y la comunidad sigue vinculada al proceso.',
+        ind: { name: 'Participación comunitaria', text: 'se mantiene', level: 80 } },
+      { id: 'b', label: 'Seguir solo con quienes asistan', desc: 'Sigues con la reunión presencial y consideras únicamente a los vecinos que lleguen.',
+        consequence: 'El diagnóstico representa a muy pocas personas y deja fuera a quienes no pudieron ir. El informe pierde legitimidad ante la comunidad.',
+        hint: 'Busca una forma de que las voces ausentes también lleguen al diagnóstico y queden registradas.' }
+    ],
+    win: 'Adaptaste la herramienta sin perder participación.', award: { key: 2, badge: 'Vinculador Territorial' } },
+
+  { type: 'choice', id: 'c3c', room: 3, label: 'Caso 3 · Gestión de crisis', nivel: 'Nivel 3 · Gestión de crisis en aula', use: 'ai',
+    title: 'Nadie leyó el material',
+    situation: 'Es la Semana 3. Diseñaste una secuencia de Aula Invertida: la teoría va al espacio asincrónico y la clase presencial se usa para resolver casos complejos en equipo. Al llegar a la sala, notas que el 60% de los estudiantes no revisó las videoclases ni las lecturas previas.',
+    question: '¿Qué haces con las 2 horas presenciales?',
+    options: [
+      { id: 'B', label: 'Evaluación sorpresa punitiva', desc: 'Aplicas de inmediato una evaluación sumativa sorpresa y haces salir a quienes no leyeron.',
+        consequence: 'El clima de aula se vuelve tenso, se pierde la evaluación formativa y la coevaluación entre pares se bloquea por desmotivación generalizada.',
+        ind: { name: 'Compromiso estudiantil', text: 'bajo', level: 15 },
+        hint: 'La meta es que vuelvan a prepararse, no castigarlos. Piensa en una comprobación formativa y en cómo aprovechar a quienes sí leyeron.' },
+      { id: 'A', label: 'Clase magistral', desc: 'Te frustras y dedicas las 2 horas a explicar tú las lecturas que no leyeron.',
+        consequence: 'Destruyes la dinámica del Aula Invertida. En las semanas siguientes nadie revisa el material previo, porque saben que «el profe lo explicará todo de nuevo en la pizarra».',
+        ind: { name: 'Autogestión estudiantil', text: 'se desploma', level: 10 },
+        hint: 'Si lo explicas todo en clase, ¿para qué prepararían el material la próxima vez? Busca una opción que use la sesión para aplicar, no para repetir.' },
+      { id: 'C', ok: true, label: 'Quiz de entrada + trabajo en parejas', desc: 'Aplicas un quiz de comprobación rápido en CANVAS e integras parejas heterogéneas (quien leyó con quien no) para resolver un caso guiado con rúbrica de desempeño.',
+        consequence: 'Rescatas el tiempo presencial con interacción activa entre pares. CANVAS registra la alerta de dudas no resueltas en los foros previos a la clase y ajustas los últimos 20 minutos para reforzar solo los conceptos críticos.',
+        ind: { name: 'Autogestión estudiantil', text: 'se sostiene', level: 85 } }
+    ],
+    win: 'Reconviertes la crisis en una oportunidad de aprendizaje colaborativo.', award: { key: 3, badge: 'Gestor de Crisis Didáctica' } },
+
+  { type: 'choice', id: 'c4m', room: 4, label: 'Caso 4 · Elegir metodología', nivel: 'Nivel 4 · Proyecto en equipos',
+    title: 'Un problema real de una empresa',
+    situation: 'Dictas Taller de Diseño de Servicios en una carrera de ingeniería. Quieres que equipos de cuatro estudiantes resuelvan un problema real que plantea una empresa local y entreguen una propuesta de solución, con avances por hitos y una defensa final.',
+    question: '¿Qué metodología activa se ajusta mejor a este taller?',
+    okMsg: 'Un problema real, equipos, hitos y un producto final con el docente como guía describen el ABP.',
+    options: [
+      { id: 'as', label: MET[2].name, desc: MET[2].def, consequence: 'Esta metodología exige un servicio y una reflexión con una comunidad. El problema es de una empresa, así que el vínculo se improvisa y los objetivos del taller se desdibujan.' },
+      { id: 'coil', label: MET[3].name, desc: MET[3].def, consequence: 'Coordinas con una universidad extranjera, pero el problema no requiere trabajo intercultural. La logística pesa más que la solución.' },
+      { id: 'ai', label: MET[4].name, desc: MET[4].def, consequence: 'Reorganizas contenidos y clases, pero los equipos siguen sin un problema central que resolver.' },
+      { id: 'inv', label: MET[1].name, desc: MET[1].def, consequence: 'Los equipos se enfocan en revisar literatura y reportar hallazgos. La propuesta que resuelve el problema de la empresa queda sin construir.' },
+      { id: 'abp', ok: true, label: MET[0].name, desc: MET[0].def }
+    ],
+    hint: 'Fíjate en lo que entrega cada equipo: una solución a un problema real, con avances por etapas. ¿Qué metodología organiza el aprendizaje en torno a un problema o proyecto?' },
+
+  { type: 'choice', id: 'c4c', room: 4, label: 'Caso 4 · Configurar CANVAS', nivel: 'Nivel 4 · Proyecto en equipos', use: 'abp',
+    title: 'Configura el seguimiento de los equipos',
+    situation: 'Aplicarás ABP. Son 12 equipos que trabajan durante 8 semanas. Necesitas ver cómo avanza cada uno, dar retroalimentación a tiempo y saber qué aportó cada integrante.',
+    question: '¿Cómo configuras CANVAS?',
+    options: [
+      { id: 'A', label: 'Un solo buzón al final', desc: 'Abres un único buzón de entrega al final del semestre con una rúbrica sumativa.',
+        consequence: 'Los equipos trabajan en la última semana. Descubres los problemas cuando ya no hay tiempo de corregirlos y las entregas son muy desiguales.',
+        adjust: 'Tendrás que agregar hitos intermedios y reabrir plazos.', ind: { name: 'Seguimiento de avances', text: 'bajo', level: 15 },
+        hint: 'Un proyecto de 8 semanas necesita entregas parciales con retroalimentación mientras todavía se puede corregir.' },
+      { id: 'B', label: 'Foro general del curso', desc: 'Usas un foro general para que los 12 equipos coordinen su trabajo y compartan sus avances.',
+        consequence: 'Los mensajes de todos los equipos se mezclan. Nadie encuentra su información y no queda claro quién aportó qué dentro de cada equipo.',
+        ind: { name: 'Trazabilidad de aportes', text: 'baja', level: 20 },
+        hint: 'Cada equipo necesita su propio espacio de trabajo y una forma de visibilizar la contribución individual.' },
+      { id: 'C', ok: true, label: 'Grupos + entregas por hitos + coevaluación de aportes', desc: 'Configuras grupos en CANVAS con espacio propio, entregas por hitos con rúbrica y una coevaluación de la contribución de cada integrante.',
+        consequence: 'Cada equipo trabaja en su espacio y entrega avances que recibes con retroalimentación a tiempo. La coevaluación hace visible el aporte individual y los equipos llegan a la defensa final con la propuesta ajustada.',
+        ind: { name: 'Seguimiento de avances', text: 'alto', level: 85 } }
+    ],
+    win: 'Tus equipos avanzan por etapas y con trazabilidad.', award: { key: 4, badge: 'Arquitecto de Proyectos' } },
+
+  { type: 'choice', id: 'c5m', room: 5, label: 'Caso 5 · Elegir metodología', nivel: 'Nivel 5 · Colaboración internacional',
+    title: 'Dos ciudades, un mismo problema',
+    situation: 'Dictas Gestión Ambiental Urbana. Una universidad de México tiene un curso equivalente. Ambas docentes quieren que sus estudiantes comparen la gestión de residuos en sus ciudades, trabajando juntos en línea, en equipos mixtos, durante cuatro semanas.',
+    question: '¿Qué metodología activa se ajusta mejor a esta propuesta?',
+    okMsg: 'Dos instituciones de países distintos, con equipos mixtos que resuelven una tarea conjunta en línea: eso es COIL.',
+    options: [
+      { id: 'as', label: MET[2].name, desc: MET[2].def, consequence: 'Buscas un socio comunitario local. No hay servicio ni comunidad involucrada, y el eje internacional se pierde.' },
+      { id: 'abp', label: MET[0].name, desc: MET[0].def, consequence: 'Diseñas un proyecto para los equipos de tu curso. La universidad mexicana queda fuera y se pierde el contraste entre ciudades.' },
+      { id: 'inv', label: MET[1].name, desc: MET[1].def, consequence: 'Cada grupo recoge datos de su ciudad por separado y solo se comparan al final los textos escritos. No hubo trabajo conjunto.' },
+      { id: 'coil', ok: true, label: MET[3].name, desc: MET[3].def },
+      { id: 'ai', label: MET[4].name, desc: MET[4].def, consequence: 'Mejoras tus clases con videos y casos, pero no existe un trabajo compartido entre ambas instituciones.' }
+    ],
+    hint: 'Observa quiénes trabajan juntos y en qué espacio. ¿Qué metodología une cursos de instituciones de distintos países en una tarea común en línea?' },
+
+  { type: 'choice', id: 'c5c', room: 5, label: 'Caso 5 · Configurar CANVAS', nivel: 'Nivel 5 · Colaboración internacional', use: 'coil',
+    title: 'Configura el espacio compartido',
+    situation: 'Aplicarás COIL. Los estudiantes viven en husos horarios distintos, tienen calendarios académicos diferentes y nunca se han visto. Debes lograr que los equipos mixtos trabajen de verdad juntos.',
+    question: '¿Cómo organizas el trabajo en línea?',
+    options: [
+      { id: 'C', ok: true, label: 'Espacio compartido + tareas conjuntas + encuentros acordados', desc: 'Habilitas un espacio compartido entre ambos cursos con equipos mixtos, una actividad de presentación, tareas conjuntas con rúbrica común, foros asincrónicos y dos videollamadas acordadas entre ambas docentes.',
+        consequence: 'Los equipos mixtos avanzan de forma asincrónica y se encuentran en dos videollamadas. Comparan datos de ambas ciudades y reflexionan sobre sus diferencias culturales. Ambas docentes evalúan con la misma rúbrica.',
+        ind: { name: 'Colaboración intercultural', text: 'alta', level: 85 } },
+      { id: 'A', label: 'Aulas paralelas', desc: 'Cada curso trabaja en su propia aula y, al final, intercambian por correo los mejores trabajos.',
+        consequence: 'Se arman dos cursos paralelos que nunca interactúan. Lo único que se comparte son archivos PDF al cierre.',
+        adjust: 'Tendrás que crear un espacio común y rehacer las tareas como actividades conjuntas.', ind: { name: 'Interacción intercultural', text: 'nula', level: 0 },
+        hint: 'COIL necesita un espacio compartido y tareas conjuntas desde el inicio, no un intercambio de productos al final.' },
+      { id: 'B', label: 'Videollamadas obligatorias', desc: 'Exiges reuniones sincrónicas semanales en el horario de tu curso.',
+        consequence: 'Los estudiantes de México no pueden asistir por horario y por sus clases. Los equipos mixtos se desarman y participan casi solo los de tu curso.',
+        ind: { name: 'Participación de equipos mixtos', text: 'baja', level: 20 },
+        hint: 'Considera los husos horarios y los calendarios distintos. Combina trabajo asincrónico con pocos encuentros acordados.' }
+    ],
+    win: 'Logras que dos cursos trabajen como un solo equipo.', award: { key: 5, badge: 'Tejedor de Redes Internacionales' } },
+
+  { type: 'final' }
+];
+
+/* ---------- Estado ---------- */
+const S = { i: 0, log: {}, sel: null, fb: null, hint: false, tried: {}, cls: {}, clsRes: null, keys: [false, false, false, false, false, false], badges: [], refl: { met: '', txt: '' }, copyMsg: '' };
+const app = document.getElementById('app');
+const logOf = id => (S.log[id] = S.log[id] || { attempts: 0 });
+const metName = id => (MET.find(m => m.id === id) || {}).name || '';
+
+/* ---------- Vistas ---------- */
+function header() {
+  document.getElementById('keys').innerHTML = [0, 1, 2, 3, 4, 5].map(k =>
+    `<li class="${S.keys[k] ? 'got' : ''}"><svg aria-hidden="true"><use href="#i-${S.keys[k] ? 'key' : 'lock'}"/></svg>Llave ${k + 1}<span class="sr">${S.keys[k] ? ': obtenida' : ': pendiente'}</span></li>`).join('');
+  const st = STEPS[S.i];
+  const cur = st.type === 'intro' ? -1 : st.type === 'final' ? ROOMS.length - 1 : st.room;
+  document.getElementById('map').innerHTML = ROOMS.map((r, n) =>
+    `<li class="${n < cur ? 'done' : n === cur ? 'current' : ''}"${n === cur ? ' aria-current="step"' : ''}>${n < ROOMS.length - 1 ? 'Sala ' + n + ' · ' : ''}${r.n}${n < cur ? '<span class="sr"> (superada)</span>' : ''}</li>`).join('');
+}
+
+function archive() {
+  return `<details class="arch"><summary>Archivo de metodologías (consulta cuando quieras)</summary>${MET.map(m =>
+    `<div class="met"><p><strong>${m.name}</strong></p><p>${m.def}</p><p><em>Características:</em> ${m.car}</p></div>`).join('')}</details>`;
+}
+
+function listenBtn() { return `<button class="ghost" data-act="speak" type="button" id="speakBtn">Escuchar esta escena</button>`; }
+
+function viewIntro() {
+  return `<section class="scene" id="scene">
+    <p class="eyebrow">Escape room para docentes</p>
+    <h1 tabindex="-1" id="head">Metodologías activas y entorno universitario</h1>
+    <div class="story"><p>Es el primer día del semestre. Eres la persona a cargo de tus cursos en el campus virtual, pero el aula está cerrada con seis cerraduras. Cada una se abre con una decisión pedagógica bien fundamentada.</p>
+    <p>Si te equivocas, verás primero qué ocurre en el aula y luego recibirás pistas para volver a intentarlo.</p></div>
+    <p class="eyebrow">Instrucciones</p>
+    <p class="instr">Analiza el problema de cada asignatura, selecciona la metodología activa correcta y configura las herramientas de CANVAS adecuadas para optimizar el aprendizaje de tus estudiantes y superar los desafíos del semestre.</p>
+    <p class="note">No hay temporizador. Todo el contenido está escrito en pantalla y también puedes escucharlo. Al final podrás copiar el registro de tus decisiones.</p>
+    <div class="row">${listenBtn()}<button class="go" data-act="next" type="button">Entrar al campus virtual</button></div>
+  </section>`;
+}
+
+function viewClassify(st) {
+  const done = S.clsRes && Object.values(S.clsRes).every(Boolean);
+  const tools = TOOLS.map(t => {
+    const r = S.clsRes && S.clsRes[t.id] !== undefined ? S.clsRes[t.id] : null;
+    return `<fieldset class="tool"><legend>${t.name}</legend><p class="desc">${t.desc}</p>
+      <div class="cats">${CATS.map(c => `<label class="cat"><input type="radio" name="t-${t.id}" value="${c.id}" data-tool="${t.id}" ${S.cls[t.id] === c.id ? 'checked' : ''} ${done ? 'disabled' : ''}>${c.name}</label>`).join('')}</div>
+      <p class="res ${r === null ? '' : r ? 'ok' : 'bad'}" id="res-${t.id}" ${r === null ? 'hidden' : ''}>${r === null ? '' : r ? t.ok : '<strong>Consecuencia.</strong> ' + t.bad}</p></fieldset>`;
+  }).join('');
+  return `<section class="scene" id="scene">
+    <p class="eyebrow">Sala 0 · Recepción</p>
+    <h2 tabindex="-1" id="head">Inventario de herramientas</h2>
+    <div class="story"><p>La puerta de entrada tiene una consola con seis herramientas de CANVAS. Para desbloquearla, clasifica cada una según la función principal que cumple en el aula.</p></div>
+    <div class="row" style="margin:0 0 12px">${listenBtn()}</div>
+    ${tools}
+    <div class="row"><button type="button" data-act="check" id="checkBtn" ${done ? 'hidden' : ''} ${TOOLS.every(t => S.cls[t.id]) ? '' : 'disabled'}>Comprobar clasificación</button></div>
+    <div id="fb" tabindex="-1" aria-live="polite">${done ? `<div class="card ok"><h3>Primera cerradura abierta</h3><p>Ya sabes qué hace cada herramienta. Obtienes la Llave 1.</p></div><div class="row"><button class="go" data-act="next" type="button">Pasar a la siguiente sala</button></div>` : ''}</div>
+  </section>`;
+}
+
+function viewChoice(st) {
+  const tried = S.tried[st.id] || [];
+  const won = S.fb && S.fb.ok;
+  const room = ROOMS[st.room].n;
+  const opts = st.options.map(o => {
+    const isTried = tried.includes(o.id);
+    const isWon = won && o.ok;
+    return `<label class="opt ${isTried ? 'tried' : ''} ${isWon ? 'won' : ''}"><input type="radio" name="opt" value="${o.id}" ${isTried || won ? 'disabled' : ''} ${isWon ? 'checked' : ''}>
+      <span class="body"><b>${o.label || o.desc}</b>${o.label ? `<span>${o.desc}</span>` : ''}${isTried ? '<span class="state">Ya probada: no resolvió el problema</span>' : ''}${isWon ? '<span class="state">Decisión correcta</span>' : ''}</span></label>`;
+  }).join('');
+  let fb = '';
+  if (S.fb) {
+    const o = S.fb.opt;
+    const ind = o.ind ? `<div class="ind"><span><b>${o.ind.name}:</b> ${o.ind.text}</span><div class="bar" role="img" aria-label="${o.ind.name}: ${o.ind.text}"><i style="width:${o.ind.level}%"></i></div></div>` : '';
+    if (S.fb.ok) {
+      const last = st.award;
+      fb = `<div class="card ok"><h3>Decisión correcta</h3><p>${o.consequence ? o.consequence : st.okMsg}</p>${st.okMsg && o.consequence ? '' : ''}${ind}${st.win ? `<p style="margin-top:8px"><b>Resultado:</b> ${st.win}</p>` : ''}</div>`;
+      if (last) fb += `<div class="card ok"><h3>Cerradura abierta</h3><p>Obtienes la Llave ${last.key + 1}.${last.badge ? ` Insignia desbloqueada: <b>${last.badge}</b>.` : ''}</p></div>`;
+      fb += `<div class="row"><button class="go" data-act="next" type="button">${S.i === STEPS.length - 2 ? 'Abrir la puerta de salida' : 'Continuar'}</button></div>`;
+    } else {
+      fb = `<div class="card bad"><h3>Consecuencia en el aula</h3><p>${o.consequence}</p>${ind}${o.adjust ? `<p style="margin-top:8px"><b>Ajuste necesario:</b> ${o.adjust}</p>` : ''}</div>`;
+      fb += S.hint ? `<div class="card hint"><h3>Pista</h3><p>${o.hint || st.hint}</p></div>` : `<div class="row"><button class="ghost" data-act="hint" type="button">Ver una pista</button></div>`;
+      fb += `<p class="note">Elige otra opción y confirma de nuevo.</p>`;
+    }
+  }
+  return `<section class="scene" id="scene">
+    <p class="eyebrow">${room === 'Recepción' ? '' : 'Sala ' + st.room + ' · '}${st.nivel}</p>
+    <h2 tabindex="-1" id="head">${st.title}</h2>
+    ${st.use ? `<p class="note"><b>Metodología en uso:</b> ${metName(st.use)}</p>` : ''}
+    <div class="story"><span class="tag">Situación</span><p>${st.situation}</p></div>
+    <div class="row" style="margin:0 0 12px">${listenBtn()}</div>
+    ${st.type === 'choice' && !st.use ? archive() : ''}
+    <fieldset id="fs"><legend>${st.question}</legend><div class="opts">${opts}</div></fieldset>
+    ${won ? '' : `<div class="row"><button type="button" data-act="confirm" id="confirmBtn" ${S.sel ? '' : 'disabled'}>Confirmar decisión</button></div>`}
+    <div id="fb" tabindex="-1" aria-live="polite">${fb}</div>
+  </section>`;
+}
+
+function viewFinal() {
+  const rows = STEPS.filter(s => s.id).map(s => {
+    const L = S.log[s.id] || { attempts: 0 };
+    const res = L.attempts === 1 ? 'Al primer intento' : L.attempts > 1 ? `Tras ${L.attempts} intentos` : 'Sin registro';
+    return `<tr><td>${s.label}</td><td>${res}</td></tr>`;
+  }).join('');
+  const metOpts = ['<option value="">Selecciona una metodología</option>'].concat(MET.map(m => `<option value="${m.name}" ${S.refl.met === m.name ? 'selected' : ''}>${m.name}</option>`)).join('');
+  return `<section class="scene" id="scene">
+    <p class="eyebrow">Sala final · Salida</p>
+    <h2 tabindex="-1" id="head">Las seis cerraduras están abiertas</h2>
+    <div class="story"><p>Cruzas la puerta y el aula virtual queda lista para recibir a tus estudiantes. Antes de salir, revisa tus decisiones y piensa cómo llevarlas a tu propia asignatura.</p></div>
+    ${S.badges.length ? `<p class="eyebrow">Insignias obtenidas</p><ul class="badges">${S.badges.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+    <p class="eyebrow">Registro de tus decisiones</p>
+    <div class="tbl"><table><thead><tr><th>Desafío</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="eyebrow">Tu asignatura</p>
+    <label class="f" for="refMet">¿Qué metodología se ajusta mejor a una de tus asignaturas?</label>
+    <select id="refMet">${metOpts}</select>
+    <label class="f" for="refTxt">¿Qué herramienta de CANVAS configurarías primero y por qué?</label>
+    <textarea id="refTxt" placeholder="Escribe tu respuesta aquí">${S.refl.txt}</textarea>
+    <div class="row" style="margin-top:14px"><button type="button" data-act="copy">Copiar registro</button><button class="ghost" type="button" data-act="restart">Reiniciar recorrido</button></div>
+    <p class="note" id="copyMsg" role="status">${S.copyMsg}</p>
+    <textarea id="copyArea" hidden readonly aria-label="Registro para copiar manualmente"></textarea>
+  </section>`;
+}
+
+/* ---------- Render ---------- */
+function render(focus) {
+  header();
+  const st = STEPS[S.i];
+  app.innerHTML = st.type === 'intro' ? viewIntro() : st.type === 'classify' ? viewClassify(st) : st.type === 'choice' ? viewChoice(st) : viewFinal();
+  const target = focus === 'fb' ? document.getElementById('fb') : document.getElementById('head');
+  if (target && focus !== 'none') { target.focus({ preventScroll: focus === 'fb' ? false : true }); if (focus === 'fb') target.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+  if (focus === 'top') window.scrollTo(0, 0);
+  if (!('speechSynthesis' in window)) { const b = document.getElementById('speakBtn'); if (b) b.hidden = true; }
+}
+
+function go(n) { window.speechSynthesis && speechSynthesis.cancel(); S.i = n; S.sel = null; S.fb = null; S.hint = false; S.clsRes = null; render('top'); window.scrollTo(0, 0); }
+
+function award(a) {
+  if (!a) return;
+  S.keys[a.key] = true;
+  if (a.badge && !S.badges.includes(a.badge)) S.badges.push(a.badge);
+}
+
+function reportText() {
+  const lines = ['Registro de recorrido · Metodologías activas y entorno universitario', ''];
+  STEPS.filter(s => s.id).forEach(s => {
+    const L = S.log[s.id] || { attempts: 0 };
+    lines.push(`${s.label}: ${L.attempts === 1 ? 'al primer intento' : L.attempts > 1 ? 'tras ' + L.attempts + ' intentos' : 'sin registro'}`);
+  });
+  lines.push('', 'Insignias: ' + (S.badges.join(', ') || 'ninguna'), '', 'Metodología que mejor se ajusta a mi asignatura: ' + (S.refl.met || 'sin respuesta'), 'Herramienta que configuraría primero y por qué: ' + (S.refl.txt || 'sin respuesta'));
+  return lines.join('\n');
+}
+
+/* ---------- Eventos ---------- */
+app.addEventListener('change', e => {
+  const t = e.target;
+  if (t.name === 'opt') { S.sel = t.value; const b = document.getElementById('confirmBtn'); if (b) b.disabled = false; }
+  else if (t.dataset && t.dataset.tool) {
+    S.cls[t.dataset.tool] = t.value;
+    if (S.clsRes) delete S.clsRes[t.dataset.tool];
+    const r = document.getElementById('res-' + t.dataset.tool); if (r) { r.hidden = true; r.className = 'res'; }
+    const b = document.getElementById('checkBtn'); if (b) b.disabled = !TOOLS.every(x => S.cls[x.id]);
+  }
+  else if (t.id === 'refMet') S.refl.met = t.value;
+});
+app.addEventListener('input', e => { if (e.target.id === 'refTxt') S.refl.txt = e.target.value; });
+
+app.addEventListener('click', async e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const act = b.dataset.act, st = STEPS[S.i];
+  if (act === 'next') go(S.i + 1);
+  else if (act === 'check') {
+    logOf(st.id).attempts++;
+    S.clsRes = {}; TOOLS.forEach(t => S.clsRes[t.id] = S.cls[t.id] === t.cat);
+    if (Object.values(S.clsRes).every(Boolean)) award(st.award);
+    render('fb');
+  }
+  else if (act === 'confirm') {
+    const o = st.options.find(x => x.id === S.sel); if (!o) return;
+    logOf(st.id).attempts++;
+    if (o.ok) { S.fb = { ok: true, opt: o }; award(st.award); }
+    else { (S.tried[st.id] = S.tried[st.id] || []).push(o.id); S.fb = { ok: false, opt: o }; S.hint = false; }
+    S.sel = null; render('fb');
+  }
+  else if (act === 'hint') { S.hint = true; render('fb'); }
+  else if (act === 'speak') {
+    if (!('speechSynthesis' in window)) return;
+    if (speechSynthesis.speaking) { speechSynthesis.cancel(); b.textContent = 'Escuchar esta escena'; return; }
+    /* Aquí se puede reemplazar por el audio narrado con ElevenLabs (un archivo por escena). */
+    const txt = document.getElementById('scene').innerText.replace(/Escuchar esta escena|Detener audio/g, '');
+    const u = new SpeechSynthesisUtterance(txt); u.lang = 'es-CL';
+    u.onend = () => { b.textContent = 'Escuchar esta escena'; };
+    b.textContent = 'Detener audio'; speechSynthesis.speak(u);
+  }
+  else if (act === 'copy') {
+    const txt = reportText(), msg = document.getElementById('copyMsg');
+    try { await navigator.clipboard.writeText(txt); S.copyMsg = 'Registro copiado. Pégalo en un documento para entregarlo.'; msg.textContent = S.copyMsg; }
+    catch (err) {
+      const a = document.getElementById('copyArea'); a.hidden = false; a.value = txt; a.focus(); a.select();
+      msg.textContent = 'No se pudo copiar automáticamente. El texto quedó seleccionado: cópialo con Ctrl+C.';
+    }
+  }
+  else if (act === 'restart') { Object.assign(S, { i: 0, log: {}, sel: null, fb: null, hint: false, tried: {}, cls: {}, clsRes: null, keys: [false, false, false, false, false, false], badges: [], refl: { met: '', txt: '' }, copyMsg: '' }); render('top'); }
+});
+
+render('none');
+</script>
+
+</body></html>
